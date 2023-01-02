@@ -1,0 +1,90 @@
+<html>
+<head>
+<title>Python Flask Upload and display image</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+<link rel="icon" type="image/x-icon" href="/static/back.jpg">      
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<style>
+
+</style>
+<div style="font-size:20px;text-align:center;color:white;padding-top:10px;padding-bottom:-5px;"><a href="/analytics" style="color:white"><u>Analytics</u></a></div>
+<body style="background-image: url(static/back.jpg);background-size: cover;">
+<p><h1 align="center" style="color: white;padding-top: 30px;text-shadow: 3px 3px #100000;">Upload X-Ray Image</h1></p>
+<div class="container" >
+<div class="row">
+    {% if not filename %}
+        <b><p style="color: white;padding-top: 5px;;border: 1px black;font:22px;">Select a file to upload</p></b>
+    {% endif %}
+    <p align= style="color: white;">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+            {% for message in messages %}
+              <li style="color: white;border: 1px black;">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </p>
+   
+    {% if filename %}
+        <div>
+            <img src="{{ url_for('display_image', filename=filename) }}" height="400px">
+        </div>
+    {% endif %}
+    
+    <form method="post" action="/predict" enctype="multipart/form-data">
+        {% if not filename %}
+        <dl style="color:white;">
+            <p>
+                <input type="file" style="background-color: aliceblue;" name="file" class="form-control" autocomplete="off" required>
+            </p>
+            <p>
+                <label for="patient-id">Enter your patient-id:</label>
+                <input type="text" style="background-color: aliceblue;" name="patient-id" placeholder="Patient-ID" class="form-control" autocomplete="off" required>
+            </p>
+            <p >
+                <label for="gender">Choose your gender;:</label>
+                <select id="gender" name="gender" size="1" style="color:black;">
+                    <option value="F">Female</option>
+                    <option value="M">Male</option>
+                </select>
+            </p>
+            <p>
+                <label for="patient-id">Enter your height in cm:</label>
+                <input type="number" style="background-color: aliceblue;" name="height" class="form-control" autocomplete="off" required>
+            </p>
+            <p>
+                <label for="patient-id">Enter your age:</label>
+                <input type="number" style="background-color: aliceblue;" name="age" class="form-control" autocomplete="off" required>
+            </p>
+        </dl>
+        
+        <p>
+            <input type="submit" value="Submit" class="btn btn-info" >
+        </p>
+        {% endif %}
+        {% if filename %}
+        
+        <br/>
+        <p>
+            <input type="reset" value="Change" class="btn btn-info" onclick="history.back()">
+            <h4 style="color:white; font-size:20px">Prediction: </h4>
+            {% if pred == "PNEUMONIA" %}
+                <h4 style="color:red; font-size:20px">{{pred}}</h4>
+            {% else %}
+                <h4 style="color:green; font-size:20px">{{pred}}</h4>
+            {% endif %}
+            <h4 style="color:white; font-size:20px">Confidence: {{conf}}%</h4>
+            {% if conf <= 75 %}
+                <h4 style="color:red">Confidence is low.</h4>
+            {% endif %}
+        </p>
+        {% endif %}
+    </form>
+    
+</div>
+</div>
+</body>
+</html>

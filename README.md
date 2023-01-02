@@ -1,1 +1,1 @@
-# pneumonia-detector
+# pnuemonia-detector

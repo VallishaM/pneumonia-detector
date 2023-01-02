@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Python Flask Upload and display image</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+<link rel="icon" type="image/x-icon" href="/static/back.jpg">      
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<style>
+
+</style>
+<body style="background-image: url(static/back.jpg);background-size: cover;">
+<p><h1 align="center" style="color: white;padding-top: 30px;text-shadow: 3px 3px #100000;">Analytics</h1></p>
+<div class="container" align="center">
+<div align="center" class="row" style="color:white;font-size:20px;">
+   Men are <div style="color:red;display:inline-block;font-size:22px;"> {{ male*100 }}% </div> of people with lung disease.
+   {% if male >= 0.5 %}
+        Which means, you are <div style="color:red;display:inline-block;font-size:22px;">more likely</div> to develop lung problems if you are a <div style="color:red;display:inline-block;font-size:22px;">man</div>.
+    {% endif %}
+    {% if male < 0.5 %}
+        Which means, you are <div style="color:red;display:inline-block;font-size:22px;">more likely</div> to develop lung problems if you are a <div style="color:red;display:inline-block;font-size:22px;">woman</div>.
+    {% endif %}
+    <br/>
+    <div style="color:red;display:inline-block;font-size:22px;">{{ age0 }}%</div> of patients are in age of range 0-25 years.<br/>
+    <div style="color:red;display:inline-block;font-size:22px;">{{ age1 }}%</div> of patients are in age range of 25-50 years.<br/>
+    <div style="color:red;display:inline-block;font-size:22px;">{{ age2 }}%</div> of patients are in age range of 50-75 years.<br/>
+    <div style="color:red;display:inline-block;font-size:22px;">{{ age3 }}%</div> of patients are greater than 75 years of age.<br/>
+</div>
+</div>
+</body>
+</html>
