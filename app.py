@@ -76,7 +76,6 @@ def get_analytics():
         try:
             age_i = int(i["age"])
         except:
-            print("age : ", i["age"])
             continue
         total_count += 1
 
