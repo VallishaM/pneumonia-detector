@@ -11,7 +11,7 @@ import json
 from datetime import datetime
 
 app = Flask(__name__)
-
+CACHE = "./dynamic/cache.json"
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "static/uploads")
 connection_string = "mongodb+srv://uname:meymey@cluster0.aaslhf7.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(connection_string)
@@ -23,6 +23,9 @@ app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(["jpg", "jpeg"])
 
 model = load_model("pneumonia.h5")
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 
 def allowed_file(filename):
@@ -40,9 +43,9 @@ def home():
 @app.route("/analytics")
 def get_analytics():
     dateformat = "%Y-%m-%d %H:%M:%S"
-    if os.path.exists("./static/cache.json"):
+    if os.path.exists(CACHE):
         now_time = datetime.now()
-        with open("./static/cache.json", "r") as openfile:
+        with open(CACHE, "r") as openfile:
             json_object = json.load(openfile)
             if (
                 now_time - datetime.strptime(json_object["time"], dateformat)
@@ -85,9 +88,7 @@ def get_analytics():
             count[2] += 1
         else:
             count[3] += 1
-    if not os.path.exists("./static/cache.json"):
-        with open("./static/cache.json", "w") as fp:
-            pass
+
     now = datetime.now()
     # convert to string
     date_time_str = now.strftime(dateformat)
@@ -99,8 +100,22 @@ def get_analytics():
         "age2": round(count[2] * 100 / total_count, 2),
         "age3": round(count[3] * 100 / total_count, 2),
     }
-    with open("./static/cache.json", "w") as outfile:
-        json.dump(dic, outfile)
+    flag = False
+    if os.path.exists(CACHE):
+        now_time = datetime.now()
+        with open(CACHE, "r") as openfile:
+            json_object = json.load(openfile)
+            if (
+                now_time - datetime.strptime(json_object["time"], dateformat)
+            ).total_seconds() > 300:
+                flag = True
+    if not os.path.exists(CACHE):
+        flag = True
+    if flag:
+        print("Redo")
+        with open(CACHE, "w") as outfile:
+            json.dump(dic, outfile)
+
     return render_template(
         "analytics.html",
         male=male,
