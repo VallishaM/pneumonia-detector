@@ -66,10 +66,14 @@ def get_analytics():
                 )
 
     male = len(
-        list(dataset.find({"gender": "M", "labels": {"$ne": "No Finding"}}))
-    ) / len(list(dataset.find({"labels": {"$ne": "No Finding"}})))
+        list(
+            dataset.find(
+                {"gender": "M", "labels": {"$ne": "No Finding"}}, {"age": 1, "_id": 0}
+            )
+        )
+    ) / len(list(dataset.find({"labels": {"$ne": "No Finding"}}, {"age": 1, "_id": 0})))
     male = float(str(male)[0:5])
-    age_mean = dataset.find({"labels": {"$ne": "No Finding"}})
+    age_mean = dataset.find({"labels": {"$ne": "No Finding"}}, {"age": 1, "_id": 0})
     count = [0, 0, 0, 0]
     total_count = 0
     for i in age_mean:
