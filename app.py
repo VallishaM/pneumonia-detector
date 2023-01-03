@@ -163,13 +163,14 @@ def upload_image():
                 confidence = prediction
 
             flash("Image successfully uploaded and displayed below")
-        dataset.insert_one(
-            {
-                "labels": new_pred,
-                "gender": request.form.get("gender"),
-                "age": int(request.form.get("age")),
-            }
-        )
+        if confidence > 0.9:
+            dataset.insert_one(
+                {
+                    "labels": new_pred,
+                    "gender": request.form.get("gender"),
+                    "age": int(request.form.get("age")),
+                }
+            )
         return render_template(
             "upload.html",
             filename=filename,
