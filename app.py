@@ -162,7 +162,7 @@ def upload_image():
                 confidence = prediction
 
             flash("Image successfully uploaded and displayed below")
-        if confidence > 0.9:
+        if confidence > 0.85:
             dataset.insert_one(
                 {
                     "labels": new_pred,
