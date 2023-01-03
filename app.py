@@ -172,6 +172,7 @@ def upload_image():
                     "labels": new_pred,
                     "gender": request.form.get("gender"),
                     "age": int(request.form.get("age")),
+                    "height": int(request.form.get("height")),
                 }
             )
         return render_template(
